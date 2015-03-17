@@ -107,7 +107,7 @@ class TapParser
             $this->failures++;
         }
 
-        if (preg_match('/(?:(Error|Failure):\s*)?(\S+)::(\S+)/', $matches[3], $moreMatches)) {
+        if (preg_match('/(?:(Error|Failure):\s*)?(.*)\((.*)\)/U', $matches[3], $moreMatches)) {
             if ($moreMatches[1] === 'Error') {
                 $test['severity'] = 'error';
             } elseif ($moreMatches[1] === 'Failure') {
