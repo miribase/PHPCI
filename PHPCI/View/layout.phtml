@@ -40,11 +40,6 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-    <style>
-
-
-    </style>
 </head>
 <body class="skin-blue">
 <!-- header logo: style can be found in header.less -->
@@ -134,7 +129,7 @@
                 <div class="pull-left image">
                     <img src="https://www.gravatar.com/avatar/<?php print md5($this->User()->getEmail()); ?>?d=mm" class="img-circle" alt="<?php print $this->User()->getName(); ?>" />
                 </div>
-                <div class="pull-left info">
+                <div class="info">
                     <p><?php Lang::out('hello_name', $this->User()->getName()); ?></p>
                 </div>
             </div>

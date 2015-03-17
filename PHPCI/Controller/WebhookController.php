@@ -157,6 +157,8 @@ class WebhookController extends \PHPCI\Controller
      * Handle the payload when Github sends a commit webhook.
      * @param $project
      * @param array $payload
+     * @param b8\Http\Response\JsonResponse $response
+     * @return b8\Http\Response\JsonResponse
      */
     protected function githubCommitRequest($project, array $payload, b8\Http\Response\JsonResponse $response)
     {
@@ -167,7 +169,6 @@ class WebhookController extends \PHPCI\Controller
         }
 
         try {
-
             if (isset($payload['commits']) && is_array($payload['commits'])) {
                 // If we have a list of commits, then add them all as builds to be tested:
 
@@ -231,6 +232,11 @@ class WebhookController extends \PHPCI\Controller
             }
 
             foreach ($response['body'] as $commit) {
+                // Skip all but the current HEAD commit ID:
+                if ($commit['sha'] != $payload['pull_request']['head']['sha']) {
+                    continue;
+                }
+
                 $branch = str_replace('refs/heads/', '', $payload['pull_request']['base']['ref']);
                 $committer = $commit['commit']['author']['email'];
                 $message = $commit['commit']['message'];
@@ -265,13 +271,10 @@ class WebhookController extends \PHPCI\Controller
         $payload = json_decode($payloadString, true);
 
         try {
-
-
             // build on merge request events
             if (isset($payload['object_kind']) && $payload['object_kind'] == 'merge_request') {
                 $attributes = $payload['object_attributes'];
                 if ($attributes['state'] == 'opened' || $attributes['state'] == 'reopened') {
-
                     $branch = $attributes['source_branch'];
                     $commit = $attributes['last_commit'];
                     $committer = $commit['author']['email'];
